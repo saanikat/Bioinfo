@@ -1,3 +1,9 @@
+/*SNP Calling Pipeline
+Does the following:
+1. Align FASTQ reads to a reference Genome to create an alignment file
+2. Processing the alignment file
+3. Calling the variants 
+*/
 #!/bin/bash
 
 VERBOSE=0
