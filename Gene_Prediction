@@ -1,0 +1,58 @@
+'''
+Gene Prediction is an important step in computational genomics. This code takes the contigs .fasta files as input which can be generated performing Genome Assembly. The code uses 3 different gene prediction tools and compares their CPU Usage, RAM, and duration. 
+
+input: contigs .fasta files
+output: .gff and .faa files
+
+The tools compared are:
+1. Prodigal:https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-11-119
+2. FragGeneScan: https://pubmed.ncbi.nlm.nih.gov/20805240/
+3. Balrog: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008727
+
+Alternatively, if you simply want to generate the gene prediction results, you can comment out any of the tools you do not want results from.
+'''
+
+#!/usr/bin/env python3
+
+import subprocess
+import pathlib
+from timeit import default_timer as timer
+import psutil
+import numpy as np
+import threading
+import os
+import humanfriendly
+import glob
+
+# Change this to the directory where the assembly results are, without the trailing "/"
+contig_dir = 'assembly/final_results'
+
+pathlib.Path('prediction/').mkdir(exist_ok=True)
+os.chdir('prediction/')
+input_filenames = [x.split('/')[-1] for x in glob.glob(f'../{contig_dir}/*.fasta')]
+contig_ids = [x.split("/")[-1].split("_")[0] for x in input_filenames] #extracting the contig ids
+
+class TrackCPU(threading.Thread):
+    '''
+    Utility for tracking CPU use by creating a new thread and storing CPU use of the current process in an array.
+    Returns the average usage across all CPU cores.
+    '''
+    def run(self):
+        self.running = True
+        currentProcess = psutil.Process()
+        self.cpu_usage = []
+        while self.running:
+            self.cpu_usage.append(currentProcess.cpu_percent())
+
+    def stop(self):
+        self.running = False
+        return np.mean(self.cpu_usage)/ psutil.cpu_count()
+    
+def prodigal():
+    pathlib.Path('prodigal_output/').mkdir(exist_ok=True)
+    os.chdir('prodigal_output/')
+    cpu=TrackCPU()
+    cpu.start()
+    time=[]
+    memory=[]
+    start=timer()    
