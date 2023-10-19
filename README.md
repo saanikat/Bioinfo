@@ -1,6 +1,6 @@
 # Bioinformatics Codes
 Here are some basic codes and pipelines used extensively in bioinformatics. Given below is a brief description for each of the provided codes. 
-1. SNP_Calling,sh: This code takes FASTQ reads and a reference genome as an input. It aligns the FASTQ reads to the reference genome to create an alignment file. It then processes the alignment file followed by variant calling. This pipeline employs GATK (Genome Analysis Toolkit- https://gatk.broadinstitute.org/hc/en-us) for this. 
+1. SNP_Calling.sh: This code takes FASTQ reads and a reference genome as an input. It aligns the FASTQ reads to the reference genome to create an alignment file. It then processes the alignment file followed by variant calling. This pipeline employs GATK (Genome Analysis Toolkit- https://gatk.broadinstitute.org/hc/en-us) for this. 
 2. Gene_prediction.py: Gene Prediction is a crucial step in Computational Genomics. This code takes the contigs .fasta files as input which can be generated performing Genome Assembly. The code uses 3 different gene prediction tools and compares their CPU Usage, RAM, and duration. The tools compared are:
    1. Prodigal:https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-11-119
    2. FragGeneScan: https://pubmed.ncbi.nlm.nih.gov/20805240/
